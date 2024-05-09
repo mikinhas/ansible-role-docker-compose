@@ -1,0 +1,6 @@
+- name: ansible-role-docker
+  src: git+https://github.com/mikinhas/ansible-role-docker.git
+  version: main
+- name: ansible-role-docker-compose
+  src: git+https://github.com/mikinhas/ansible-role-docker-compose.git
+  version: main

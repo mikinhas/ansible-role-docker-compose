@@ -1,0 +1,31 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: true
+  roles:
+    - ansible-role-docker
+    - ansible-role-docker-compose
+  vars:
+    docker_user: vagrant
+    docker_compose_user: "{{ docker_user }}"
+    docker_compose_default_path: molecule
+  tasks:
+    - name: Create project folders
+      become: true
+      ansible.builtin.file:
+        path: "{{ docker_compose_default_path }}/nginx"
+        state: directory
+        owner: "{{ docker_compose_user }}"
+        group: "{{ docker_compose_user }}"
+    - name: Copy docker-compose file
+      ansible.builtin.template:
+        src: ./templates/docker-compose.yml.j2
+        dest: "{{ docker_compose_default_path }}/nginx/docker-compose.yml"
+    - name: Execute docker-compose file
+      community.docker.docker_compose:
+        project_src: "{{ docker_compose_default_path }}/nginx"
+        pull: true
+        use_ssh_client: true
+    - name: Test if nginx container is up
+      ansible.builtin.uri:
+        url: http://localhost:8080
