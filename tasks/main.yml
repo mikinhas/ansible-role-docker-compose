@@ -9,10 +9,11 @@
 - name: Install prerequisites python packages
   ansible.builtin.pip:
     name: "{{ item }}"
-    extra_args: --user
+    extra_args: "--user --break-system-packages"
   loop:
-    - docker==6.1.3
+    - docker
     - docker-compose
+    - requests
 
 - name: Reset connection so docker group is picked up.
   ansible.builtin.meta: reset_connection
