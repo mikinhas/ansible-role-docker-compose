@@ -9,8 +9,10 @@
 - name: Install prerequisites python packages
   ansible.builtin.pip:
     name: "{{ item }}"
-    extra_args: "--user --break-system-packages"
+    extra_args: "--user --break-system-packages --no-cache-dir --no-build-isolation"
   loop:
+    - Cython<3
+    - pyyaml==5.4.1
     - docker
     - docker-compose
     - requests
