@@ -6,16 +6,32 @@
     name: python3-pip
     update_cache: true
 
-- name: Install prerequisites python packages
+- name: Install prerequisites python packages without break-system-packages option
   ansible.builtin.pip:
     name: "{{ item }}"
-    extra_args: "--user --break-system-packages --no-cache-dir --no-build-isolation"
+    extra_args: --user
   loop:
     - Cython<3
-    - pyyaml==5.4.1
     - docker
     - docker-compose
+    - pyyaml==5.4.1
     - requests
+  when:
+    - ansible_facts['python_version'] is version('3.10', '>=')
+    - ansible_facts['python_version'] is version('3.11', '<=')
+
+- name: Install prerequisites python packages with break-system-packages option
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    extra_args: --user --break-system-packages
+  loop:
+    - Cython<3
+    - docker
+    - docker-compose
+    - pyyaml==5.4.1
+    - requests
+  when:
+    - ansible_facts['python_version'] is version('3.11', '>=')
 
 - name: Reset connection so docker group is picked up.
   ansible.builtin.meta: reset_connection
