@@ -22,10 +22,9 @@
         src: ./templates/docker-compose.yml.j2
         dest: "{{ docker_compose_default_path }}/nginx/docker-compose.yml"
     - name: Execute docker-compose file
-      community.docker.docker_compose:
+      community.docker.docker_compose_v2:
         project_src: "{{ docker_compose_default_path }}/nginx"
-        pull: true
-        use_ssh_client: true
+        pull: missing
     - name: Test if nginx container is up
       ansible.builtin.uri:
         url: http://localhost:8080
