@@ -17,10 +17,12 @@
         state: directory
         owner: "{{ docker_compose_user }}"
         group: "{{ docker_compose_user }}"
+        mode: "u=rw,g=r,o=r"
     - name: Copy docker-compose file
       ansible.builtin.template:
         src: ./templates/docker-compose.yml.j2
         dest: "{{ docker_compose_default_path }}/nginx/docker-compose.yml"
+        mode: "u=rw,g=r,o=r"
     - name: Execute docker-compose file
       community.docker.docker_compose_v2:
         project_src: "{{ docker_compose_default_path }}/nginx"
